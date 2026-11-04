@@ -1,0 +1,27 @@
+Source: libxo
+Section: libs
+Priority: optional
+Maintainer: Maxwell <maxwell@blueberrypieos.com>
+Build-Depends: pietoolchain (>= 0.1.0)
+Standards-Version: 4.7.3
+Homepage: https://github.com/Juniper/libxo
+Vcs-Git: https://github.com/blueberrypieos/libxo.git -b blueberry-pie-os/latest
+Vcs-Browser: https://github.com/blueberrypieos/libxo
+Rules-Requires-Root: no
+
+Package: libxo
+Architecture: darwin-arm64
+Essential: yes
+Priority: required
+Depends: libsystem
+Description: text, XML and JSON output library
+ libxo provides text, XML, JSON and HTML output for command-line tools.
+ Includes the library and its manual pages.
+
+Package: libxo-dev
+Section: libdevel
+Priority: optional
+Architecture: darwin-arm64
+Depends: libxo (= ${binary:Version})
+Description: text, XML and JSON output library: development files
+ Headers for building programs against libxo.
