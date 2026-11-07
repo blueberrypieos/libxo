@@ -1,3 +1,9 @@
+libxo (1.7.5+ds1-2) blueberry-pie-os; urgency=medium
+
+  * Simplified config options
+
+ -- Maxwell <maxwell@blueberrypieos.com>  Sat, 07 Nov 2026 04:26:46 +0000
+
 libxo (1.7.5+ds1-1) blueberry-pie-os; urgency=medium
 
   * libxo 1.7.5
