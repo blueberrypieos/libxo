@@ -1,0 +1,33 @@
+Description: Grow the output buffer past the requested length
+ xo_buf_has_some_room rounds the size it needs up to a whole block. When
+ that size was already a whole block, the buffer did not grow, and the
+ room ended exactly at the requested length. xo_format_string_direct
+ asks for one byte less than it writes for each XML or HTML entity, so it
+ could write one byte past the heap buffer. It formats strings with a
+ width and locale strings. With --libxo xml or html, w prints other
+ users' command lines this way.
+Origin: backport, https://github.com/Juniper/libxo/commit/4c9a0634e0785451f1ce394aebd099fed6df88b8
+Author: Phil Shafer
+Last-Update: 2026-11-17
+
+--- a/libxo/xo_buf.h
++++ b/libxo/xo_buf.h
+@@ -6,6 +6,9 @@
+  * using the SOFTWARE, you agree to be bound by the terms of that
+  * LICENSE.
+  * Phil Shafer, August 2015
++ *
++ * Modified 2026-11-17: xo_buf_has_some_room leaves room past the requested
++ * length when it grows the buffer.
+  */
+ 
+ /*
+@@ -154,7 +157,7 @@ xo_buf_has_some_room (xo_buffer_t *xbp,
+ 	 * Find out how much new space we need, round it up to bufsiz
+ 	 */
+ 	ssize_t sz = (xbp->xb_curp + len) - xbp->xb_bufp;
+-	sz = (sz + bufsiz - 1) & ~(bufsiz - 1);
++	sz = (sz + bufsiz) & ~(bufsiz - 1);
+ 
+ 	char *bp = xo_realloc(xbp->xb_bufp, sz);
+ 	if (bp == NULL)

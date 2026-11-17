@@ -1,0 +1,32 @@
+Description: Reserve room for the whole padded string
+ xo_format_string reserved room for the minimum width in bytes before it
+ padded a string. A string can take more bytes than columns: multibyte
+ characters, XML and HTML entities, and JSON and SD-PARAMS escapes. The
+ padding then wrote past the end of the heap buffer. df pads each mount
+ source to the byte length of the longest one, in text output and with
+ --libxo.
+Author: The Blueberry Pie OS Authors
+Forwarded: no
+Last-Update: 2026-11-17
+
+--- a/libxo/libxo.c
++++ b/libxo/libxo.c
+@@ -10,6 +10,9 @@
+  * Modified 2026-11-17: the XML, JSON and SD-PARAMS escapers reserve room
+  * for the whole escaped string.
+  *
++ * Modified 2026-11-17: padding a string to its minimum width reserves room
++ * for the whole padded string.
++ *
+  * This is the implementation of libxo, the formatting library that
+  * generates multiple styles of output from a single code path.
+  * Command line utilities can have their normal text output while
+@@ -3179,7 +3182,7 @@ xo_format_string (xo_handle_t *xop, xo_b
+ 	 * but if we did the work ourselves, then we need to do it.
+ 	 */
+ 	int delta = xfp->xf_width[XF_WIDTH_MIN] - cols;
+-	if (!xo_buf_has_room(xbp, xfp->xf_width[XF_WIDTH_MIN]))
++	if (!xo_buf_has_room(xbp, rc + delta))
+ 	    goto bail;
+ 
+ 	/*

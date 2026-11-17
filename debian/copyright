@@ -85,6 +85,13 @@ Copyright: 2026 The Blueberry Pie OS Authors
  1991-2026 Unicode, Inc.
 License: BSD-2-Clause AND Unicode-3.0
 
+Files: debian/patches/0001-escape-buffer-room.patch
+ debian/patches/0002-buffer-room-rounding.patch
+ debian/patches/0003-padding-room.patch
+Copyright: 2014-2023 Juniper Networks, Inc.
+ 2026 The Blueberry Pie OS Authors
+License: LicenseRef-BSD-2-Clause-author-contributors
+
 License: BSD-2-Clause
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are

@@ -1,0 +1,49 @@
+Description: Reserve room for the whole escaped string
+ The XML, JSON and SD-PARAMS escapers checked for room only for the bytes
+ they add, then wrote the whole escaped string. Long text with characters
+ to escape ran past the end of the heap buffer. With --libxo xml or json,
+ w and last pass the user names and remote hosts of login records through
+ these escapers.
+Origin: backport, https://github.com/Juniper/libxo/commit/bff5e4167f7e832f345da754bb26f1c670b26c17
+Author: Phil Shafer
+Last-Update: 2026-11-17
+
+--- a/libxo/libxo.c
++++ b/libxo/libxo.c
+@@ -7,6 +7,9 @@
+  * LICENSE.
+  * Phil Shafer, July 2014
+  *
++ * Modified 2026-11-17: the XML, JSON and SD-PARAMS escapers reserve room
++ * for the whole escaped string.
++ *
+  * This is the implementation of libxo, the formatting library that
+  * generates multiple styles of output from a single code path.
+  * Command line utilities can have their normal text output while
+@@ -887,7 +890,7 @@ xo_escape_xml (xo_buffer_t *xbp, ssize_t
+     if (delta == 0)		/* Nothing to escape; bail */
+ 	return len;
+ 
+-    if (!xo_buf_has_room(xbp, delta)) /* No room; bail, but don't append */
++    if (!xo_buf_has_room(xbp, len + delta)) /* No room; bail, but don't append */
+ 	return 0;
+ 
+     ep = xbp->xb_curp;
+@@ -935,7 +938,7 @@ xo_escape_json (xo_buffer_t *xbp, ssize_
+     if (delta == 0)		/* Nothing to escape; bail */
+ 	return len;
+ 
+-    if (!xo_buf_has_room(xbp, delta)) /* No room; bail, but don't append */
++    if (!xo_buf_has_room(xbp, len + delta)) /* No room; bail, but don't append */
+ 	return 0;
+ 
+     ep = xbp->xb_curp;
+@@ -981,7 +984,7 @@ xo_escape_sdparams (xo_buffer_t *xbp, ss
+     if (delta == 0)		/* Nothing to escape; bail */
+ 	return len;
+ 
+-    if (!xo_buf_has_room(xbp, delta)) /* No room; bail, but don't append */
++    if (!xo_buf_has_room(xbp, len + delta)) /* No room; bail, but don't append */
+ 	return 0;
+ 
+     ep = xbp->xb_curp;
